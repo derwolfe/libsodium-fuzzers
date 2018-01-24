@@ -5,13 +5,13 @@ LIB_FUZZING_ENGINE ?= standalone_runner.o
 # You may add extra compiler flags like this:
 CXXFLAGS += -std=c++11
 
-SODIUM_INCLUDE = ../src/libsodium/include
-SODIUM_A = ../src/libsodium/.libs/libsodium.a
+SODIUM_INCLUDE = ./libsodium/src/libsodium/include
+SODIUM_A = ./libsodium/src/libsodium/.libs/libsodium.a
 
 clean:
 	rm -fv *.a *.o *_fuzzer
 
-fuzz-check: secret_key_auth_fuzzer secretbox_easy_fuzzer
+all: secret_key_auth_fuzzer secretbox_easy_fuzzer
 	./secret_key_auth_fuzzer secret_key_auth_corpus/*
 	./secretbox_easy_fuzzer secretbox_easy_corpus/*
 
@@ -19,7 +19,7 @@ fuzz-check: secret_key_auth_fuzzer secretbox_easy_fuzzer
 # you may choose which fuzzing engine to use. For travis, this means that we use
 # the standalone fuzzer, for google, we let it pick.
 libsodium.a:
-	cd .. && ./autogen.sh && ./configure --enable-static && $(MAKE) clean && $(MAKE) -j$(nproc) all
+	cd libsodium && ./configure --enable-static && $(MAKE) clean && $(MAKE) -j$(nproc) all
 
 standalone_runner.o: standalone_runner.cc
 

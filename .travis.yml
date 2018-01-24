@@ -1,0 +1,9 @@
+sudo: false
+
+language: c
+
+compiler: clang
+
+script:
+  - ./build.sh
+  - make clean && make all

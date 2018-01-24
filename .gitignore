@@ -1,2 +1,3 @@
 libsodium/
 *_fuzzer
+*.o

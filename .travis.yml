@@ -4,4 +4,4 @@ compiler: clang
 
 script:
   - ./build.sh
-  - make clean && make allgit s
+  - make clean && make all

@@ -11,7 +11,7 @@ SODIUM_A = ./libsodium/src/libsodium/.libs/libsodium.a
 clean:
 	rm -fv *.a *.o *_fuzzer
 
-all: secret_key_auth_fuzzer secretbox_easy_fuzzer
+check: secret_key_auth_fuzzer secretbox_easy_fuzzer
 	./secret_key_auth_fuzzer secret_key_auth_corpus/*
 	./secretbox_easy_fuzzer secretbox_easy_corpus/*
 

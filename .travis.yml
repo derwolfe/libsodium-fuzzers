@@ -6,7 +6,7 @@ compiler: clang
 
 script:
   - ./build.sh
-  - make clean && make all
+  - make clean && make check
 
 notifications:
   email: false

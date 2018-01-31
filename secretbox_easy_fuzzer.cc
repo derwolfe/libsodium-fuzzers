@@ -9,13 +9,21 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
 
   setup_fake_random(data, size);
 
-  unsigned char key[crypto_auth_KEYBYTES];
-  unsigned char mac[crypto_auth_BYTES];
+  unsigned char key[crypto_secretbox_KEYBYTES];
+  unsigned char nonce[crypto_secretbox_NONCEBYTES];
 
-  // this uses a deterministic generator
-  crypto_auth_keygen(key);
+  // these use a deterministic generator
+  crypto_secretbox_keygen(key);
+  randombytes_buf(nonce, sizeof nonce);
 
-  crypto_auth(mac, data, size, key);
-  crypto_auth_verify(mac, data, size, key);
+  size_t ciphertext_len = crypto_secretbox_MACBYTES + size;
+  unsigned char ciphertext[ciphertext_len];
+
+  crypto_secretbox_easy(ciphertext, data, size, nonce, key);
+
+  unsigned char decrypted[size];
+  int check = crypto_secretbox_open_easy(decrypted, ciphertext, ciphertext_len, nonce, key);
+
+  assert(check == 0);
   return 0;
 }

@@ -16,6 +16,8 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   crypto_auth_keygen(key);
 
   crypto_auth(mac, data, size, key);
-  crypto_auth_verify(mac, data, size, key);
+  int check = crypto_auth_verify(mac, data, size, key);
+
+  assert(check == 0);
   return 0;
 }

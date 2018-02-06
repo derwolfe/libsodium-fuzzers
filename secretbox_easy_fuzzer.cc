@@ -22,7 +22,8 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   crypto_secretbox_easy(ciphertext, data, size, nonce, key);
 
   unsigned char decrypted[size];
-  int check = crypto_secretbox_open_easy(decrypted, ciphertext, ciphertext_len, nonce, key);
+  int check = crypto_secretbox_open_easy(decrypted, ciphertext, ciphertext_len,
+                                         nonce, key);
   assert(check == 0);
 
   return 0;

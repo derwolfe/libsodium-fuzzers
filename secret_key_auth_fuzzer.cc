@@ -31,8 +31,9 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   assert(check == 0);
 
   // none of the key material should be present in the mac
-  size_t found = std::search(std::begin(mac), std::end(mac), std::begin(key), std::end(key)) != std::end(mac);
-  assert (found == std::string::npos);
+  unsigned char * offset = std::search(std::begin(mac), std::end(mac), std::begin(key), std::end(key));
+  bool found = offset == std::end(key); // how could this be right?
+  assert (!found);
 
   return 0;
 }

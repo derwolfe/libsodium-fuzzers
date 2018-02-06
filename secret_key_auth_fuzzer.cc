@@ -15,7 +15,7 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   sodium_memzero(mac, crypto_auth_BYTES);
   unsigned char mac_check[crypto_auth_BYTES];
 
-  std::memcpy(mac_check, &mac, crypto_auth_BYTES);
+  memcpy(mac_check, &mac, crypto_auth_BYTES);
 
   crypto_auth_keygen(key);
 
@@ -24,7 +24,7 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   assert(auth_check == 0);
 
   // the mac should change from its default to a new value after auth is called.
-  int mac_changed = std::memcmp(mac, mac_check, crypto_auth_BYTES);
+  int mac_changed = memcmp(mac, mac_check, crypto_auth_BYTES);
   assert(mac_changed != 0);
 
   // verification should not fail if the mac and key are successfully generated

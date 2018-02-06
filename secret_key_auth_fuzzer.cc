@@ -35,6 +35,7 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   // the key should not be leaked into the mac buffer
   assert(crypto_auth_BYTES == crypto_auth_KEYBYTES);
   int leaked = memcmp(key, mac, crypto_auth_BYTES);
+  assert(leaked != 0);
 
   return 0;
 }

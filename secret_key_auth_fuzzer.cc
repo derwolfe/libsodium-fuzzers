@@ -2,6 +2,7 @@
 #include <sodium.h>
 #include <cstring>
 #include <string>
+#include <cstdio>
 
 #include "fake_random.h"
 
@@ -17,18 +18,18 @@ int is_subarray(const unsigned char *needle, const size_t needle_size,
 
   for (ct = 0; ct < haystack_size; ct++) {
     // advance through the haystack.
-    const size_t new_haystack_size = sizeof(haystack) - ct;
+    const size_t new_haystack_size = haystack_size - ct;
 
     // no more checks to check. Full key cannot be present in a smaller array.
     if (new_haystack_size < needle_size) {
       break;
     }
 
-    check = std::memcmp(haystack + ct, needle, new_haystack_size);
+    check = std::memcmp(&haystack[ct], needle, new_haystack_size);
     if (check == 0) {
-      continue;
-    } else {
       return 1;
+    } else {
+      continue;
     }
   }
   return 0;

@@ -1,39 +1,7 @@
 #include <assert.h>
 #include <sodium.h>
-#include <cstring>
-#include <string>
-#include <cstdio>
 
 #include "fake_random.h"
-
-int is_subarray(const unsigned char *needle, const size_t needle_size,
-                const unsigned char *haystack, const size_t haystack_size) {
-  // haystack must be bigger than needle.
-  if (haystack_size < needle_size) {
-    return -1;
-  }
-
-  size_t ct;
-  int check;
-
-  for (ct = 0; ct < haystack_size; ct++) {
-    // advance through the haystack.
-    const size_t new_haystack_size = haystack_size - ct;
-
-    // no more checks to check. Full key cannot be present in a smaller array.
-    if (new_haystack_size < needle_size) {
-      break;
-    }
-
-    check = std::memcmp(&haystack[ct], needle, new_haystack_size);
-    if (check == 0) {
-      return 1;
-    } else {
-      continue;
-    }
-  }
-  return 0;
-}
 
 extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   int initialized = sodium_init();
@@ -65,8 +33,8 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
   assert(verify_check == 0);
 
   // the key should not be leaked into the mac buffer
-  int leaked = is_subarray(key, crypto_auth_KEYBYTES, mac, crypto_auth_BYTES);
-  assert(leaked == 0);
+  assert(crypto_auth_BYTES == crypto_auth_KEYBYTES);
+  int leaked = memcmp(key, mac, crypto_auth_BYTES);
 
   return 0;
 }

@@ -11,9 +11,8 @@ SODIUM_A = ./libsodium/src/libsodium/.libs/libsodium.a
 clean:
 	rm -fv *.a *.o *_fuzzer
 
-check: secret_key_auth_fuzzer secretbox_easy_fuzzer
+check: secret_key_auth_fuzzer
 	./secret_key_auth_fuzzer secret_key_auth_corpus/*
-	./secretbox_easy_fuzzer secretbox_easy_corpus/*
 
 # Fuzz target, links against $LIB_FUZZING_ENGINE, so that
 # you may choose which fuzzing engine to use. For travis, this means that we use
@@ -24,7 +23,4 @@ libsodium.a:
 standalone_runner.o: standalone_runner.cc
 
 secret_key_auth_fuzzer: secret_key_auth_fuzzer.cc libsodium.a standalone_runner.o
-	${CXX} ${CXXFLAGS} $< -I${SODIUM_INCLUDE} ${SODIUM_A} ${LIB_FUZZING_ENGINE} -o $@
-
-secretbox_easy_fuzzer: secretbox_easy_fuzzer.cc libsodium.a standalone_runner.o
 	${CXX} ${CXXFLAGS} $< -I${SODIUM_INCLUDE} ${SODIUM_A} ${LIB_FUZZING_ENGINE} -o $@

@@ -4,10 +4,10 @@
 #include "fake_random.h"
 
 extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  setup_fake_random(data, size);
+
   int initialized = sodium_init();
   assert(initialized >= 0);
-
-  setup_fake_random(data, size);
 
   unsigned char key[crypto_auth_KEYBYTES];
   unsigned char mac[crypto_auth_BYTES];
